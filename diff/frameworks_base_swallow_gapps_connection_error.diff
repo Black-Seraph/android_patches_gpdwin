@@ -1,0 +1,13 @@
+diff --git a/services/core/java/com/android/server/am/AppErrors.java b/services/core/java/com/android/server/am/AppErrors.java
+index a842724c317..e428b7187ed 100644
+--- a/services/core/java/com/android/server/am/AppErrors.java
++++ b/services/core/java/com/android/server/am/AppErrors.java
+@@ -373,7 +373,7 @@ class AppErrors {
+ 
+             // If we can't identify the process or it's already exceeded its crash quota,
+             // quit right away without showing a crash dialog.
+-            if (r == null || !makeAppCrashingLocked(r, shortMsg, longMsg, stackTrace, data)) {
++            if (r == null || (r.info.flags & ApplicationInfo.FLAG_SYSTEM) != 0 || !makeAppCrashingLocked(r, shortMsg, longMsg, stackTrace, data)) {
+                 return;
+             }
+

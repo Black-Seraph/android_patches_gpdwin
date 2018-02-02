@@ -1,0 +1,96 @@
+diff --git a/res/xml/default_workspace_5x5.xml b/res/xml/default_workspace_5x5.xml
+index f9cc0e789..41ff217b9 100644
+--- a/res/xml/default_workspace_5x5.xml
++++ b/res/xml/default_workspace_5x5.xml
+@@ -19,30 +19,4 @@
+     <!-- Hotseat -->
+     <include launcher:workspace="@xml/dw_phone_hotseat" />
+ 
+-    <!-- Bottom row -->
+-    <resolve
+-        launcher:screen="0"
+-        launcher:x="0"
+-        launcher:y="-1" >
+-	    <favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.APP_EMAIL;end" />
+-	    <favorite launcher:uri="mailto:" />
+-
+-    </resolve>
+-
+-    <resolve
+-        launcher:screen="0"
+-        launcher:x="1"
+-        launcher:y="-1" >
+-	    <favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.APP_GALLERY;end" />
+-	    <favorite launcher:uri="#Intent;type=images/*;end" />
+-
+-    </resolve>
+-
+-    <resolve
+-        launcher:screen="0"
+-        launcher:x="4"
+-        launcher:y="-1" >
+-        <favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.APP_MARKET;end" />
+-        <favorite launcher:uri="market://details?id=com.android.launcher" />
+-    </resolve>
+ </favorites>
+diff --git a/res/xml/dw_phone_hotseat.xml b/res/xml/dw_phone_hotseat.xml
+index b58994d1d..0d283a2ea 100644
+--- a/res/xml/dw_phone_hotseat.xml
++++ b/res/xml/dw_phone_hotseat.xml
+@@ -21,34 +21,32 @@
+         launcher:container="-101"
+         launcher:screen="0"
+         launcher:x="0"
+-        launcher:y="0" >
+-        <favorite launcher:uri="#Intent;action=android.intent.action.DIAL;end" />
+-        <favorite launcher:uri="tel:123" />
+-        <favorite launcher:uri="#Intent;action=android.intent.action.CALL_BUTTON;end" />
++	launcher:y="0" >
++	<favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.android.settings/.Settings;end" />
+     </resolve>
+ 
+     <resolve
+         launcher:container="-101"
+         launcher:screen="1"
+         launcher:x="1"
+-        launcher:y="0" >
+-        <favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.APP_MESSAGING;end" />
+-        <favorite launcher:uri="sms:" />
+-        <favorite launcher:uri="smsto:" />
+-        <favorite launcher:uri="mms:" />
+-        <favorite launcher:uri="mmsto:" />
++	launcher:y="0" >
++	<favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;package=com.android.vending;component=com.android.vending/.AssetBrowserActivity;end" />
+     </resolve>
+ 
+-    <!-- All Apps -->
++    <resolve
++        launcher:container="-101"
++	launcher:screen="2"
++	launcher:x="2"
++	launcher.y="0" >
++	<favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;package=com.android.chrome;component=com.android.chrome/com.google.android.apps.chrome.Main;end" />
++    </resolve>
+ 
+     <resolve
+         launcher:container="-101"
+         launcher:screen="3"
+         launcher:x="3"
+         launcher:y="0" >
+-        <favorite
+-            launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.APP_BROWSER;end" />
+-        <favorite launcher:uri="http://www.example.com/" />
++        <favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;component=com.cyanogenmod.eleven/.ui.activities.HomeActivity;end" />
+     </resolve>
+ 
+     <resolve
+@@ -56,8 +54,7 @@
+         launcher:screen="4"
+         launcher:x="4"
+         launcher:y="0" >
+-        <favorite launcher:uri="#Intent;action=android.media.action.STILL_IMAGE_CAMERA;end" />
+-        <favorite launcher:uri="#Intent;action=android.intent.action.CAMERA_BUTTON;end" />
++	<favorite launcher:uri="#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10200000;package=com.android.gallery3d;component=com.android.gallery3d/.app.GalleryActivity;end" />
+     </resolve>
+ 
+ </favorites>

@@ -1,0 +1,9 @@
+diff --git a/wificond.rc b/wificond.rc
+index 3cc72e6..407fcca 100644
+--- a/wificond.rc
++++ b/wificond.rc
+@@ -2,3 +2,4 @@
+     class main
+     user wifi
+     group wifi net_raw net_admin
++    capabilities NET_RAW NET_ADMIN

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+	<!-- add the required remotes -->
+	<remote name="github" fetch="https://github.com" />
+	<remote name="opengapps" fetch="https://github.com/opengapps/" />
+
+	<!-- swap out the kernel for a patched 4.15-rc9 one -->
+	<remove-project name="kernel/common" />
+	<project path="kernel" name="maurossi/linux" remote="github" revision="kernel-4.15" />
+
+	<!-- add opengapps to our build -->
+	<project path="vendor/opengapps/build" name="aosp_build" revision="master" remote="opengapps" />
+	<project path="vendor/opengapps/sources/all" name="all" clone-depth="1" revision="master" remote="opengapps" />
+	<project path="vendor/opengapps/sources/x86" name="x86" clone-depth="1" revision="master" remote="opengapps" />
+	<project path="vendor/opengapps/sources/x86_64" name="x86_64" clone-depth="1" revision="master" remote="opengapps" />
+</manifest>

@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 0580876fa336..e1a1ffa64557 100644
+--- a/Makefile
++++ b/Makefile
+@@ -415,7 +415,6 @@ LINUXINCLUDE    := \
+ KBUILD_AFLAGS   := -D__ASSEMBLY__
+ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+ 		   -fno-strict-aliasing -fno-common -fshort-wchar \
+-		   -Werror-implicit-function-declaration \
+ 		   -Wno-format-security \
+ 		   -std=gnu89
+ KBUILD_CPPFLAGS := -D__KERNEL__

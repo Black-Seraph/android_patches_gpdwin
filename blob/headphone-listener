@@ -1,0 +1,40 @@
+#!/system/bin/sh
+
+# Export the PATH variable
+export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+
+# Parse logcat (as it is the easiest way to detect the headphone jack)
+logcat -s MediaRouter | while read -r line
+do
+	# Determine if the audio route needs to be changed
+	ROUTE_CHANGED=`echo $line | grep "Audio routes updated" | wc -l`
+
+	# The audio route needs to be changed
+	if [ "$ROUTE_CHANGED" -eq "1" ]
+	then
+		# Determine which route we need to enable
+		SPEAKER=`echo $line | grep "SPEAKER" | wc -l`
+
+		# Check which route to enable
+		if [ "$SPEAKER" -eq "1" ]
+		then
+			# Enable the speaker route
+			alsa_amixer -c 0 set "Stereo DAC MIXL DAC R1" on
+			alsa_amixer -c 0 set "Stereo DAC MIXR DAC R1" off
+			alsa_amixer -c 0 set Headphone off
+			alsa_amixer -c 0 set "Headphone Channel" off
+			alsa_amixer -c 0 set "Ext Spk" on
+			alsa_amixer -c 0 set "Speaker Channel" on
+			alsa_amixer -c 0 set "Speaker" 39
+		else
+			# Enable the headphone route
+			alsa_amixer -c 0 set "Stereo DAC MIXL DAC R1" off
+			alsa_amixer -c 0 set "Stereo DAC MIXR DAC R1" on
+			alsa_amixer -c 0 set "Ext Spk" off
+			alsa_amixer -c 0 set "Speaker Channel" off
+			alsa_amixer -c 0 set Headphone on
+			alsa_amixer -c 0 set "Headphone Channel" on
+			alsa_amixer -c 0 set "Headphone" 39
+		fi
+	fi
+done
