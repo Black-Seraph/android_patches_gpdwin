@@ -1,0 +1,17 @@
+diff --git a/PrivateVolume.cpp b/PrivateVolume.cpp
+index 013e776..4a0e1c7 100644
+--- a/PrivateVolume.cpp
++++ b/PrivateVolume.cpp
+@@ -176,11 +176,7 @@ status_t PrivateVolume::doFormat(const std::string& fsType) {
+     if (fsType == "auto") {
+         // For now, assume that all MMC devices are flash-based SD cards, and
+         // give everyone else ext4 because sysfs rotational isn't reliable.
+-        if ((major(mRawDevice) == Disk::kMajorBlockMmc) && f2fs::IsSupported()) {
+-            resolvedFsType = "f2fs";
+-        } else {
+-            resolvedFsType = "ext4";
+-        }
++        resolvedFsType = "ext4";
+         LOG(DEBUG) << "Resolved auto to " << resolvedFsType;
+     }
+ 

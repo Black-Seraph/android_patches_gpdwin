@@ -29,6 +29,13 @@ cp -f "$DIR/blob/houdini8_y.sfs" etc
 chmod 775 bin/headphone-listener
 cd ../../..
 
+# patch the volatile storage daemon to use ext4 instead of f2fs for mmc devices
+# this fixes the micro-sd card compatibility issue @ https://github.com/Black-Seraph/android_patches_gpdwin/issues/4
+cd system/vold
+git reset --hard
+git apply "$DIR/diff/system_vold_fix_micro_sd_internal_storage.diff"
+cd ../..
+
 # remove outdated AOSP packages and disable the bionic ld warning
 cd build/make
 git reset --hard
