@@ -23,3 +23,6 @@ fi
 
 # build the image
 m -j4 iso_img
+
+# import addons
+bash "$DIR/importaddons.sh"

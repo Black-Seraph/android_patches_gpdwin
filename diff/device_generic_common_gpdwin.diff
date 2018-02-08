@@ -1,18 +1,16 @@
-diff --git a/BoardConfig.mk b/BoardConfig.mk
-index faf780c..83618b4 100644
---- a/BoardConfig.mk
-+++ b/BoardConfig.mk
-@@ -21,8 +21,8 @@ BOARD_MALLOC_ALIGNMENT := 16
- # Enable dex-preoptimization to speed up the first boot sequence
- # of an SDK AVD. Note that this operation only works on Linux for now
- ifeq ($(HOST_OS),linux)
--WITH_DEXPREOPT := true
--WITH_DEXPREOPT_PIC := true
-+WITH_DEXPREOPT := false
-+WITH_DEXPREOPT_PIC := false
- endif
- 
- # the following variables could be overridden
+diff --git a/app/Android.mk b/app/Android.mk
+index 0807688..61784b7 100644
+--- a/app/Android.mk
++++ b/app/Android.mk
+@@ -23,7 +23,7 @@ LOCAL_MODULE_SUFFIX := $$(suffix $(1))
+ LOCAL_BUILT_MODULE_STEM := package.apk
+ LOCAL_CERTIFICATE := PRESIGNED
+ LOCAL_SRC_FILES := $(1)
+-LOCAL_DEX_PREOPT := false
++LOCAL_DEX_PREOPT := true
+ LOCAL_MODULE_TARGET_ARCH := $$(call get-prebuilt-src-arch,$$(notdir $$(patsubst %/,%,$$(dir $$(LOCAL_LIBS)))))
+ LOCAL_PREBUILT_JNI_LIBS := $$(addprefix @,$$(filter lib/$$(LOCAL_MODULE_TARGET_ARCH)/%,$$(LOCAL_LIBS)))
+ #$$(info $$(LOCAL_MODULE) LOCAL_MODULE_TARGET_ARCH=$$(LOCAL_MODULE_TARGET_ARCH))
 diff --git a/device.mk b/device.mk
 index 3d3468b..20131e9 100644
 --- a/device.mk

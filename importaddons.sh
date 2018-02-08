@@ -3,9 +3,30 @@
 # determine the GPD Win patches folder location
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# bundle the MagiskManager into the system
-mkdir "out/target/product/x86_64/system/priv-app/MagiskManager"
-cp -f "$DIR/magisk/MagiskManager.apk" "out/target/product/x86_64/system/priv-app/MagiskManager"
+# bundle MagiskManager into the system
+cd "out/target/product/x86_64/system/app"
+mkdir MagiskManager
+cd MagiskManager
+cp -f "$DIR/magisk/MagiskManager.apk" .
+mkdir tmp
+cd tmp
+unzip ../MagiskManager.apk
+mv lib ..
+cd ..
+rm -rf tmp
+cd ..
+
+# bundle Moonlight into the system
+mkdir Moonlight
+cd Moonlight
+cp -f "$DIR/blob/Moonlight.apk" .
+mkdir tmp
+cd tmp
+unzip ../Moonlight.apk
+mv lib ..
+cd ..
+rm -rf tmp
+cd ../../../../../../..
 
 # delete all files we wish to rebuild
 rm -f "out/target/product/x86_64/android_x86_64.iso"

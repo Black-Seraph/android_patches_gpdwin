@@ -7,6 +7,5 @@ This repository builds on top of the oreo-x86 branch of the Android-x86 project 
 * cp -rf patches/local_manifests .repo
 * repo sync --no-tags --no-clone-bundle --force-sync
 * ./patches/build.sh
-* ./patches/importmagisk.sh
 
 Your build will be in out/target/product/x86_64/android_x86_64.iso
