@@ -54,9 +54,17 @@ cd frameworks/base/core/res/res
 cp "$DIR/blob/default_wallpaper.png" drawable-nodpi
 cd ../../../../..
 
-# configure and patch the kernel so the GPD Win will work with Android Oreo
+# configure and patch the kernel so the GPD Win and GPD Pocket will work with Android Oreo
 cd kernel
 git reset --hard
+git remote add goede https://github.com/jwrdegoede/linux-sunxi.git
+git remote update
+git fetch --all
+git cherry-pick -n d53a5e45c19db77c901ac6ea731cfcaffdd4a74d
+git cherry-pick -n 7e23c812de8cee1b6ee5ad22a0252cb054617b6d
+git cherry-pick -n 6c599d00a453db32daf189b1e788d2d713d4b57d
+git cherry-pick -n 10f45aa5416d1b605c2e6609320df881a63a0469
+git reset HEAD
 cp "$DIR/blob/android-x86_64_defconfig" arch/x86/configs/android-x86_64_defconfig
 git apply "$DIR/diff/kernel_disable_werror.diff"
 git apply "$DIR/diff/kernel_enable_monotonic_bss_tsf.diff"
