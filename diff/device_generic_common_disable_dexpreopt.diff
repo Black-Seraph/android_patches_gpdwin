@@ -1,0 +1,15 @@
+diff --git a/BoardConfig.mk b/BoardConfig.mk
+index faf780c..83618b4 100644
+--- a/BoardConfig.mk
++++ b/BoardConfig.mk
+@@ -21,8 +21,8 @@ BOARD_MALLOC_ALIGNMENT := 16
+ # Enable dex-preoptimization to speed up the first boot sequence
+ # of an SDK AVD. Note that this operation only works on Linux for now
+ ifeq ($(HOST_OS),linux)
+-WITH_DEXPREOPT := true
+-WITH_DEXPREOPT_PIC := true
++WITH_DEXPREOPT := false
++WITH_DEXPREOPT_PIC := false
+ endif
+ 
+ # the following variables could be overridden

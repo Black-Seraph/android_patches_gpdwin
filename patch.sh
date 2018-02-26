@@ -143,4 +143,9 @@ then
 	git clean -qfdx
 	git apply --ignore-space-change --ignore-whitespace "$DIR/diff/external_mesa_disable_hostutil_multilib.diff"
 	cd ../..
+
+	# disable dexpreopt for WSL builds
+	cd device/generic/common
+	git apply --ignore-space-change --ignore-whitespace "$DIR/diff/device_generic_common_disable_dexpreopt.diff"
+	cd ../../..
 fi
