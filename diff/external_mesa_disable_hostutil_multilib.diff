@@ -1,0 +1,26 @@
+diff --git a/src/mesa/Android.gen.mk b/src/mesa/Android.gen.mk
+index e21a41d..c0109ba 100644
+--- a/src/mesa/Android.gen.mk
++++ b/src/mesa/Android.gen.mk
+@@ -81,7 +81,7 @@ matypes_deps64 := \
+ 	$(LOCAL_PATH)/main/mtypes.h \
+ 	$(LOCAL_PATH)/tnl/t_context.h
+ 
+-$(intermediates)/x86/matypes.h: $(matypes_deps32)
++$(intermediates)/x86/matypes.h: $(matypes_deps64)
+ 	@mkdir -p $(dir $@)
+ 	@echo "MATYPES: $(PRIVATE_MODULE) <= $(notdir $@)"
+ 	$(hide) $< > $@
+diff --git a/src/mesa/Android.mesa_gen_matypes.mk b/src/mesa/Android.mesa_gen_matypes.mk
+index 163f0e2..7a417d9 100644
+--- a/src/mesa/Android.mesa_gen_matypes.mk
++++ b/src/mesa/Android.mesa_gen_matypes.mk
+@@ -32,7 +32,7 @@ LOCAL_PATH := $(call my-dir)
+ include $(CLEAR_VARS)
+ 
+ LOCAL_MODULE := mesa_gen_matypes
+-LOCAL_MULTILIB := both
++LOCAL_MULTILIB := 64
+ LOCAL_MODULE_STEM_32 := $(LOCAL_MODULE)32
+ LOCAL_MODULE_STEM_64 := $(LOCAL_MODULE)64
+ LOCAL_IS_HOST_MODULE := true

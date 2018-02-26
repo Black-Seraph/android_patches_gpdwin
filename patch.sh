@@ -136,4 +136,11 @@ then
 	cd lib64
 	cp "$DIR/blob/wsl/libc++.so" .
 	cd ../../../..
+
+	# disable hostutil multilib support for mesa (this forces the build-tools to use the 64bit header generator)
+	cd external/mesa
+	git reset --hard
+	git clean -qfdx
+	git apply --ignore-space-change --ignore-whitespace "$DIR/diff/external_mesa_disable_hostutil_multilib.diff"
+	cd ../..
 fi
