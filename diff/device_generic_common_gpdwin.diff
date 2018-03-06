@@ -1,18 +1,5 @@
-diff --git a/app/Android.mk b/app/Android.mk
-index 0807688..61784b7 100644
---- a/app/Android.mk
-+++ b/app/Android.mk
-@@ -23,7 +23,7 @@ LOCAL_MODULE_SUFFIX := $$(suffix $(1))
- LOCAL_BUILT_MODULE_STEM := package.apk
- LOCAL_CERTIFICATE := PRESIGNED
- LOCAL_SRC_FILES := $(1)
--LOCAL_DEX_PREOPT := false
-+LOCAL_DEX_PREOPT := true
- LOCAL_MODULE_TARGET_ARCH := $$(call get-prebuilt-src-arch,$$(notdir $$(patsubst %/,%,$$(dir $$(LOCAL_LIBS)))))
- LOCAL_PREBUILT_JNI_LIBS := $$(addprefix @,$$(filter lib/$$(LOCAL_MODULE_TARGET_ARCH)/%,$$(LOCAL_LIBS)))
- #$$(info $$(LOCAL_MODULE) LOCAL_MODULE_TARGET_ARCH=$$(LOCAL_MODULE_TARGET_ARCH))
 diff --git a/device.mk b/device.mk
-index 3d3468b..20131e9 100644
+index 3764464..d378c31 100644
 --- a/device.mk
 +++ b/device.mk
 @@ -14,6 +14,20 @@
@@ -49,7 +36,7 @@ index 3d3468b..20131e9 100644
  
  PRODUCT_COPY_FILES := \
      $(if $(wildcard $(PRODUCT_DIR)init.rc),$(PRODUCT_DIR)init.rc:root/init.rc) \
-@@ -77,6 +97,15 @@ PRODUCT_COPY_FILES += \
+@@ -76,6 +96,12 @@ PRODUCT_COPY_FILES += \
      $(foreach f,$(wildcard $(LOCAL_PATH)/alsa/*),$(f):$(subst $(LOCAL_PATH),system/etc,$(f))) \
      $(foreach f,$(wildcard $(LOCAL_PATH)/idc/*.idc $(LOCAL_PATH)/keylayout/*.kl),$(f):$(subst $(LOCAL_PATH),system/usr,$(f)))
  
@@ -59,13 +46,10 @@ index 3d3468b..20131e9 100644
 +PRODUCT_COPY_FILES += \
 +    $(LOCAL_PATH)/bin/headphone-listener:system/bin/headphone-listener
 +
-+PRODUCT_COPY_FILES += \
-+    $(LOCAL_PATH)/etc/houdini8_y.sfs:system/etc/houdini8_y.sfs
-+
  PRODUCT_TAGS += dalvik.gc.type-precise
  
  PRODUCT_CHARACTERISTICS := tablet
-@@ -84,6 +113,8 @@ PRODUCT_CHARACTERISTICS := tablet
+@@ -83,6 +109,8 @@ PRODUCT_CHARACTERISTICS := tablet
  PRODUCT_AAPT_CONFIG := normal large xlarge mdpi hdpi
  PRODUCT_AAPT_PREF_CONFIG := mdpi
  
@@ -73,8 +57,8 @@ index 3d3468b..20131e9 100644
 +
  DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
  
- # Get Android 8.0 HIDL HALs
-@@ -111,7 +142,7 @@ $(call inherit-product-if-exists,hardware/libsensors/sensors.mk)
+ # Get the firmwares
+@@ -107,7 +135,7 @@ $(call inherit-product-if-exists,hardware/libsensors/sensors.mk)
  $(call inherit-product,frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
  
  # Get GMS
@@ -84,10 +68,10 @@ index 3d3468b..20131e9 100644
  # Get native bridge settings
  $(call inherit-product-if-exists,$(LOCAL_PATH)/nativebridge/nativebridge.mk)
 diff --git a/init.sh b/init.sh
-index c92f375..96caf60 100644
+index 89670f8..401db43 100644
 --- a/init.sh
 +++ b/init.sh
-@@ -25,6 +25,20 @@ function init_misc()
+@@ -30,6 +30,15 @@ function init_misc()
  	# enable sdcardfs if /data is not mounted on tmpfs or 9p
  	mount | grep /data\ | grep -qE 'tmpfs|9p'
  	[ $? -ne 0 ] && modprobe sdcardfs
@@ -100,15 +84,10 @@ index c92f375..96caf60 100644
 +
 +	# fix the sleep reboot issue
 +	set_property sleep.state none
-+
-+	# place a magisk su symlink
-+	mount -o remount,rw /
-+	ln -s /sbin/magisk /sbin/su
-+	mount -o remount,ro /
  }
  
  function init_hal_audio()
-@@ -48,50 +62,6 @@ function init_hal_bluetooth()
+@@ -53,49 +62,6 @@ function init_hal_bluetooth()
  		type=$(cat $r/type)
  		[ "$type" = "wlan" -o "$type" = "bluetooth" ] && echo 1 > $r/state
  	done
@@ -117,7 +96,6 @@ index c92f375..96caf60 100644
 -		T10*TA|HP*Omni*)
 -			BTUART_PORT=/dev/ttyS1
 -			set_property hal.bluetooth.uart.proto bcm
--			[ -z "$(getprop sleep.state)" ] && set_property sleep.state none
 -			;;
 -		MacBookPro8*)
 -			rmmod b43
@@ -159,7 +137,23 @@ index c92f375..96caf60 100644
  }
  
  function init_hal_camera()
-@@ -191,94 +161,8 @@ function init_hal_sensors()
+@@ -127,14 +93,7 @@ function set_drm_mode()
+ 
+ function init_uvesafb()
+ {
+-	case "$PRODUCT" in
+-		ET2002*)
+-			UVESA_MODE=${UVESA_MODE:-1600x900}
+-			;;
+-		*)
+-			;;
+-	esac
+-
++	UVESA_MODE=${UVESA_MODE:-720x1280}
+ 	modprobe uvesafb mode_option=${UVESA_MODE:-1024x768}-32 ${UVESA_OPTION:-mtrr=3 scroll=redraw}
+ }
+ 
+@@ -199,93 +158,6 @@ function init_hal_sensors()
  
  	local hal_sensors=kbd
  	local has_sensors=true
@@ -221,20 +215,18 @@ index c92f375..96caf60 100644
 -			hal_sensors=hdaps
 -			;;
 -		*i7Stylus*)
--			set_property hal.sensors.iio.accel.matrix 1,0,0,0,-1,0,0,0,-1
--			;;
--		*ST70416-6*)
--			set_property hal.sensors.iio.accel.matrix 0,-1,0,-1,0,0,0,0,-1
+-			set_property ro.iio.accel.x.opt_scale -1
 -			;;
 -		*ONDATablet*)
--			set_property hal.sensors.iio.accel.matrix 0,1,0,1,0,0,0,0,-1
--			;;
--		*Surface.3*|*svnOEMB*)
--			set_property ro.iio.accel.y.opt_scale -1
--			;&
--		*T10*TA*)
+-			set_property ro.iio.accel.order 102
 -			set_property ro.iio.accel.x.opt_scale -1
--			set_property ro.iio.accel.z.opt_scale -1
+-			set_property ro.iio.accel.y.opt_scale -1
+-			;;
+-		*ST70416-6*)
+-			set_property ro.iio.accel.order 102
+-			;;
+-		*T10*TA*)
+-			set_property ro.iio.accel.y.opt_scale -1
 -			;;
 -		*)
 -			has_sensors=false
@@ -244,17 +236,18 @@ index c92f375..96caf60 100644
 -	# has iio sensor-hub?
 -	if [ -n "`ls /sys/bus/iio/devices/iio:device* 2> /dev/null`" ]; then
 -		busybox chown -R 1000.1000 /sys/bus/iio/devices/iio:device*/
+-		[ -n "`ls /sys/bus/iio/devices/iio:device*/in_accel_x_raw 2> /dev/null`" ] && has_sensors=true
 -		hal_sensors=iio
 -	elif lsmod | grep -q lis3lv02d_i2c; then
 -		hal_sensors=hdaps
+-		has_sensors=true
+-	elif [ "$hal_sensors" != "kbd" ]; then
+-		has_sensors=${HAS_SENSORS:-true}
 -	fi
  
  	set_property ro.hardware.sensors $hal_sensors
--	[ "$hal_sensors" != "kbd" ] && has_sensors=true
  	set_property config.override_forced_orient $has_sensors
- }
- 
-@@ -410,28 +294,29 @@ function do_bootcomplete()
+@@ -419,28 +291,26 @@ function do_bootcomplete()
  			;;
  	esac
  
@@ -271,13 +264,13 @@ index c92f375..96caf60 100644
 -			alsa_amixer -c $c set Headphone on
 -			alsa_amixer -c $c set Headphone 100%
 -			alsa_amixer -c $c set Speaker 100%
--			alsa_amixer -c $c set Capture 100%
+-			alsa_amixer -c $c set Capture 80%
 -			alsa_amixer -c $c set Capture cap
 -			alsa_amixer -c $c set PCM 100 unmute
 -			alsa_amixer -c $c set SPO unmute
 -			alsa_amixer -c $c set IEC958 on
--			alsa_amixer -c $c set 'Mic Boost' 3
--			alsa_amixer -c $c set 'Internal Mic Boost' 3
+-			alsa_amixer -c $c set 'Mic Boost' 1
+-			alsa_amixer -c $c set 'Internal Mic Boost' 1
  		fi
  	done
  
@@ -290,69 +283,17 @@ index c92f375..96caf60 100644
 +	alsa_amixer -c 0 set "Speaker Channel" on
 +	alsa_amixer -c 0 set "Speaker" 31
 +
-+	# Start the headphone listener (which takes care of switching our inputs)
++	# Start the headphone listener (which takes care of switching routes)
 +	headphone-listener &
-+
-+	# Enable Houdini
-+	start nativebridge
 +
  	post_bootcomplete
  }
  
-diff --git a/nativebridge/bin/enable_nativebridge b/nativebridge/bin/enable_nativebridge
-index 2e3a926..bf33b73 100644
---- a/nativebridge/bin/enable_nativebridge
-+++ b/nativebridge/bin/enable_nativebridge
-@@ -5,39 +5,17 @@ PATH=/system/bin:/system/xbin
- houdini_bin=0
- dest_dir=/system/lib$1/arm$1
- binfmt_misc_dir=/proc/sys/fs/binfmt_misc
-+v=8_y
- 
--if [ -z "$1" ]; then
--	if [ "`uname -m`" = "x86_64" ]; then
--		v=8_y
--		url=http://goo.gl/v6c4Co
--	else
--		v=8_x
--		url=http://goo.gl/96BPKe
--	fi
--else
--	v=8_z
--	url=http://goo.gl/CtKjxx
-+if [ ! -e /data/arm/houdini$v.sfs ]; then
-+	mkdir /data/arm
-+	cp /system/etc/houdini$v.sfs /data/arm/houdini$v.sfs
- fi
- 
- if [ -s /system/lib$1/libhoudini.so ]; then
- 	log -pi -thoudini "found /system/lib$1/libhoudini.so"
--elif [ -e /system/etc/houdini$v.sfs ]; then
--	mount /system/etc/houdini$v.sfs $dest_dir
- else
--	if mountpoint -q $dest_dir; then
--		kill -9 `fuser -m $dest_dir`
--		umount -f $dest_dir
--	fi
--	mkdir -p /data/arm
--	cd /data/arm
--	while ! mount houdini$v.sfs $dest_dir; do
--		while [ "$(getprop net.dns1)" = "" ]; do
--			sleep 10
--		done
--		wget $url -cO houdini$v.sfs && continue
--		rm -f houdini$v.sfs
--		sleep 30
--	done
-+	mount /data/arm/houdini$v.sfs $dest_dir
- fi
- 
- [ -s /system/lib$1/libhoudini.so ] || mount --bind $dest_dir/libhoudini.so /system/lib$1/libhoudini.so
 diff --git a/overlay/frameworks/base/core/res/res/values/config.xml b/overlay/frameworks/base/core/res/res/values/config.xml
-index 3e0fe2b..6c0e044 100644
+index 3e0fe2b..5d89851 100644
 --- a/overlay/frameworks/base/core/res/res/values/config.xml
 +++ b/overlay/frameworks/base/core/res/res/values/config.xml
-@@ -107,7 +107,25 @@
+@@ -107,7 +107,29 @@
      <!-- Flag indicating that this device does not rotate and will always remain in its default
           orientation. Activities that desire to run in a non-compatible orientation will be run
           from an emulated display within the physical display. -->
@@ -368,6 +309,10 @@ index 3e0fe2b..6c0e044 100644
 +         docked if the dock is configured to enable the accelerometer. -->
 +    <bool name="config_supportAutoRotation">false</bool>
 +
++    <!-- If true, the screen can be rotated via the accelerometer in all 4
++         rotations as the default behavior. -->
++    <bool name="config_allowAllRotations">false</bool>
++
 +    <!-- Indicate whether closing the lid causes the lockscreen to appear.
 +         The default is false. -->
 +    <bool name="config_lidControlsScreenLock">true</bool>
@@ -379,7 +324,7 @@ index 3e0fe2b..6c0e044 100644
  
      <!-- The device supports freeform window management. Windows have title bars and can be moved
           and resized. If you set this to true, you also need to add
-@@ -116,6 +134,10 @@
+@@ -116,6 +138,10 @@
           available to the system.-->
      <bool name="config_freeformWindowManagement">true</bool>
  
@@ -391,7 +336,7 @@ index 3e0fe2b..6c0e044 100644
           various workspace stacks.
           0 - Nav bar is always opaque when either the freeform stack or docked stack is visible.
 diff --git a/packages.mk b/packages.mk
-index 665a344..a5b7ffc 100644
+index 6bae5ef..a97b264 100644
 --- a/packages.mk
 +++ b/packages.mk
 @@ -27,12 +27,8 @@ PRODUCT_PACKAGES := \

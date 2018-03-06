@@ -1,5 +1,5 @@
 diff --git a/target/product/core.mk b/target/product/core.mk
-index a2b0f1c55..4bc300d4a 100644
+index 0a4e0fd..692f7df 100644
 --- a/target/product/core.mk
 +++ b/target/product/core.mk
 @@ -24,7 +24,6 @@ PRODUCT_PACKAGES += \
@@ -7,10 +7,10 @@ index a2b0f1c55..4bc300d4a 100644
      BlockedNumberProvider \
      BookmarkProvider \
 -    Browser2 \
-     BuiltInPrintService \
      Calendar \
      CalendarProvider \
-@@ -51,7 +50,6 @@ PRODUCT_PACKAGES += \
+     CaptivePortalLogin \
+@@ -50,7 +49,6 @@ PRODUCT_PACKAGES += \
      PrintSpooler \
      PrintRecommendationService \
      ProxyHandler \

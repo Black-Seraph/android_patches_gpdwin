@@ -1,5 +1,5 @@
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 845fc25812f1d..b83704f13c2d8 100644
+index 845fc25..b83704f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -5953,6 +5953,12 @@ L:	linux-input@vger.kernel.org
@@ -16,7 +16,7 @@ index 845fc25812f1d..b83704f13c2d8 100644
  M:	Mika Westerberg <mika.westerberg@linux.intel.com>
  M:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 2c745e8ccad6c..8d13dc7d824a5 100644
+index 73aa71e..d26937f 100644
 --- a/drivers/platform/x86/Kconfig
 +++ b/drivers/platform/x86/Kconfig
 @@ -244,6 +244,18 @@ config AMILO_RFKILL
@@ -39,7 +39,7 @@ index 2c745e8ccad6c..8d13dc7d824a5 100644
  	tristate "HP Compaq TC1100 Tablet WMI Extras"
  	depends on !X86_64
 diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index c32b34a724679..9b215bda5e4c9 100644
+index af574ad..f5a392d 100644
 --- a/drivers/platform/x86/Makefile
 +++ b/drivers/platform/x86/Makefile
 @@ -28,6 +28,7 @@ obj-$(CONFIG_HP_ACCEL)		+= hp_accel.o

@@ -1,24 +1,28 @@
-diff --git a/boot/boot/grub/grub.cfg b/boot/boot/grub/grub.cfg
-index 58f5d11..b685cf4 100644
---- a/boot/boot/grub/grub.cfg
-+++ b/boot/boot/grub/grub.cfg
-@@ -14,7 +14,7 @@ menuentry 'Android-x86 VER DEBUG mode' --class android-x86 {
- 
- menuentry 'Android-x86 VER Installation' --class android-x86 {
- 	search --file --no-floppy --set=root /system.sfs
--	linux /kernel CMDLINE DEBUG= INSTALL=1
-+	linux /install CMDLINE DEBUG= INSTALL=1
- 	initrd /initrd.img
- }
- 
 diff --git a/boot/isolinux/isolinux.cfg b/boot/isolinux/isolinux.cfg
-index 48ca8fd..c416ecf 100644
+index 01ff90e..3fa12e8 100644
 --- a/boot/isolinux/isolinux.cfg
 +++ b/boot/isolinux/isolinux.cfg
-@@ -28,5 +28,5 @@ label debug
+@@ -23,7 +23,7 @@ label debug
  
  label install
- 	menu label Installation - ^Install Android-x86 to harddisk
+ 	menu label ^Installation - Install OS_TITLE to harddisk
 -	kernel /kernel
 +	kernel /install
  	append initrd=/initrd.img CMDLINE INSTALL=1 DEBUG=
+ 
+ menu separator
+@@ -41,12 +41,12 @@ menu separator
+ 
+ label auto_install
+ 	menu label Audo_^Installation - Auto Install to specified harddisk
+-	kernel /kernel
++	kernel /install
+ 	append initrd=/initrd.img CMDLINE AUTO_INSTALL=0 DEBUG=
+ 
+ label auto_update
+ 	menu label Audo_^Update - Auto update OS_TITLE
+-	kernel /kernel
++	kernel /install
+ 	append initrd=/initrd.img CMDLINE AUTO_INSTALL=update DEBUG=
+ 
+ menu separator

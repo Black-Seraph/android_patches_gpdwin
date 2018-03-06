@@ -25,7 +25,7 @@ index 3aa06db..22527cc 100644
  int OutputZipFile::Finish() {
    if (fd_out > 0) {
      WriteCentralDirectory();
-+    munmap(zipdata_out, mmap_length_);
++    munmap(zipdata_out_, mmap_length_);
      if (ftruncate(fd_out, GetSize()) < 0) {
        return error("ftruncate(fd_out, GetSize()): %s", strerror(errno));
      }

@@ -3,20 +3,20 @@
 # determine the GPD Win patches folder location
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# fix the screen rotation (portrait -> landscape)
+# fix the google apps permissions and swallow non-critical errors
 cd frameworks/base
 git reset --hard
 git clean -qfdx
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/frameworks_base_rotate_screen.diff"
+git apply --ignore-space-change --ignore-whitespace "$DIR/diff/frameworks_base_grant_google_apps_permission.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/frameworks_base_swallow_gapps_connection_error.diff"
 cd ../..
 
-# grant wificond the required capabilities to control wifi
-cd system/connectivity/wificond
+# fix the screen rotation (portrait -> landscape)
+cd hardware/libsensors
 git reset --hard
 git clean -qfdx
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/system_connectivity_wificond_wifi_capability.diff"
-cd ../../..
+git apply --ignore-space-change --ignore-whitespace "$DIR/diff/hardware_libsensors_kbd_rotate_landscape.diff"
+cd ../..
 
 # patch the device tree to fix a whole bunch of GPD Win related problems
 cd device/generic/common
@@ -27,8 +27,6 @@ mkdir media 2>/dev/null
 cp -f "$DIR/blob/bootanimation.zip" media
 mkdir bin 2>/dev/null
 cp -f "$DIR/blob/headphone-listener" bin
-mkdir etc 2>/dev/null
-cp -f "$DIR/blob/houdini8_y.sfs" etc
 chmod 775 bin/headphone-listener
 cd ../../..
 
@@ -41,12 +39,12 @@ git apply --ignore-space-change --ignore-whitespace "$DIR/diff/system_vold_fix_m
 cd ../..
 
 # remove outdated AOSP packages and disable the bionic ld warning
-cd build/make
+cd build
 git reset --hard
 git clean -qfdx
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/build_make_remove_aosp_packages.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/build_make_disable_bionic_ld_warning.diff"
-cd ../..
+cd ..
 
 # change the launcher shortcuts
 cd packages/apps/Launcher3
@@ -64,13 +62,10 @@ cd ../../../../..
 cd kernel
 git reset --hard
 git clean -qfdx
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/pocket/d53a5e45c19db77c901ac6ea731cfcaffdd4a74d.diff"
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/pocket/7e23c812de8cee1b6ee5ad22a0252cb054617b6d.diff"
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/pocket/6c599d00a453db32daf189b1e788d2d713d4b57d.diff"
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/pocket/10f45aa5416d1b605c2e6609320df881a63a0469.diff"
-cp "$DIR/blob/android-x86_64_defconfig" arch/x86/configs/android-x86_64_defconfig
+git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_add_gpd_pocket_fan_driver.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_disable_werror.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_enable_monotonic_bss_tsf.diff"
+cp "$DIR/blob/android-x86_64_defconfig" arch/x86/configs/android-x86_64_defconfig
 cd ..
 
 # patch the installer to boot off an older pre-built kernel (to avoid the vesamenu backlight bug)
@@ -80,13 +75,6 @@ git clean -qfdx
 cp "$DIR/blob/vesakernel" boot/install
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/bootable_newinstaller_backlight_bug_workaround.diff"
 rm -f .git/shallow 2>/dev/null
-cd ../..
-
-# remove the su binary (as we will bundle magisk later)
-cd system/extras
-git reset --hard
-git clean -qfdx
-rm -rf su
 cd ../..
 
 # we are running in WSL
@@ -100,10 +88,10 @@ then
 	cd ../..
 
 	# replace the prebuilt ijar with 64bit version
-	cd prebuilts/build-tools
-	cp "$DIR/blob/wsl/ijar" "linux-x86/bin"
-	cp "$DIR/blob/wsl/ckati_stamp_dump" "linux-x86/asan/bin"
-	cd ../..
+	#cd prebuilts/build-tools
+	#cp "$DIR/blob/wsl/ijar" "linux-x86/bin"
+	#cp "$DIR/blob/wsl/ckati_stamp_dump" "linux-x86/asan/bin"
+	#cd ../..
 
 	# replace bison and flex with 64bit versions
 	cd prebuilts/misc
