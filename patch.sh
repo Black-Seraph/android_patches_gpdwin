@@ -9,13 +9,7 @@ git reset --hard
 git clean -qfdx
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/frameworks_base_grant_google_apps_permission.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/frameworks_base_swallow_gapps_connection_error.diff"
-cd ../..
-
-# fix the screen rotation (portrait -> landscape)
-cd hardware/libsensors
-git reset --hard
-git clean -qfdx
-git apply --ignore-space-change --ignore-whitespace "$DIR/diff/hardware_libsensors_kbd_rotate_landscape.diff"
+git apply --ignore-space-change --ignore-whitespace "$DIR/diff/frameworks_base_rotate_screen.diff"
 cd ../..
 
 # patch the device tree to fix a whole bunch of GPD Win related problems
