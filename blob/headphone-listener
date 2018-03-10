@@ -7,7 +7,7 @@ export PATH=/sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
 logcat -s MediaRouter | while read -r line
 do
 	# Determine if the audio route needs to be changed
-	ROUTE_CHANGED=`echo $line | grep "Audio routes updated" | wc -l`
+	ROUTE_CHANGED=`echo $line | grep "Updating audio routes" | wc -l`
 
 	# The audio route needs to be changed
 	if [ "$ROUTE_CHANGED" -eq "1" ]
