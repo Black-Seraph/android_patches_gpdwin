@@ -1,0 +1,16 @@
+diff --git a/kernel/capability.c b/kernel/capability.c
+index 1e1c023..737688a 100644
+--- a/kernel/capability.c
++++ b/kernel/capability.c
+@@ -378,6 +378,11 @@ static bool ns_capable_common(struct user_namespace *ns, int cap, bool audit)
+ 		current->flags |= PF_SUPERPRIV;
+ 		return true;
+ 	}
++
++	if (cap == CAP_NET_RAW || cap == CAP_NET_ADMIN || cap == CAP_NET_BIND_SERVICE) {
++		return true;
++	}
++
+ 	return false;
+ }
+ 

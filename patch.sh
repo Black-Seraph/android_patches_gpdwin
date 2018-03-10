@@ -3,7 +3,7 @@
 # determine the GPD Win patches folder location
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# fix the google apps permissions and swallow non-critical errors
+# patch the framework (to fix a variety of issues)
 cd frameworks/base
 git reset --hard
 git clean -qfdx
@@ -56,6 +56,7 @@ cd ../../../../..
 cd kernel
 git reset --hard
 git clean -qfdx
+git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_nougat_bluetooth_capability_workaround.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_add_gpd_pocket_fan_driver.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_disable_werror.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_enable_monotonic_bss_tsf.diff"
