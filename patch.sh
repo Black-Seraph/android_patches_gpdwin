@@ -17,7 +17,6 @@ cd device/generic/common
 git reset --hard
 git clean -qfdx
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/device_generic_common_gpdwin.diff"
-cp -f "$DIR/blob/com.github.yeriomin.yalpstore_35.apk" app
 mkdir media 2>/dev/null
 cp -f "$DIR/blob/bootanimation.zip" media
 mkdir bin 2>/dev/null
