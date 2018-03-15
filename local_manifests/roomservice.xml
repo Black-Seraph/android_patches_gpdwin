@@ -2,8 +2,12 @@
 <manifest>
 	<!-- add the required remotes -->
 	<remote name="github" fetch="https://github.com" />
+	<remote name="gitlab" fetch="ssh://git@gitlab.com" />
 
 	<!-- swap the outdated kernel for a more up to date mainline one -->
 	<remove-project name="kernel/common" />
 	<project path="kernel" name="maurossi/linux" remote="github" revision="kernel-4.15" />
+
+	<!-- add the google apps -->
+	<project name="andx86/vendor_google" path="vendor/google" remote="gitlab" revision="nougat-x86" sync-c="true" clone-depth="1" />
 </manifest>

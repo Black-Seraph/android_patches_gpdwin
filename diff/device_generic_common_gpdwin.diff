@@ -1,8 +1,8 @@
 diff --git a/device.mk b/device.mk
-index 3764464..d378c31 100644
+index 3764464..506cf7b 100644
 --- a/device.mk
 +++ b/device.mk
-@@ -14,6 +14,20 @@
+@@ -14,6 +14,21 @@
  # limitations under the License.
  #
  
@@ -18,12 +18,13 @@ index 3764464..d378c31 100644
 +GAPPS_EXCLUDED_PACKAGES := \
 +    FaceLock \
 +    AndroidPlatformServices \
-+    PrebuiltGmsCoreInstantApps
++    PrebuiltGmsCoreInstantApps \
++    Phonesky
 +
  PRODUCT_DIR := $(dir $(lastword $(filter-out device/common/%,$(filter device/%,$(ALL_PRODUCTS)))))
  
  PRODUCT_PROPERTY_OVERRIDES := \
-@@ -28,6 +42,12 @@ PRODUCT_PROPERTY_OVERRIDES := \
+@@ -28,6 +43,12 @@ PRODUCT_PROPERTY_OVERRIDES := \
  PRODUCT_DEFAULT_PROPERTY_OVERRIDES := \
      ro.arch=x86 \
      persist.rtc_local_time=1 \
@@ -36,7 +37,7 @@ index 3764464..d378c31 100644
  
  PRODUCT_COPY_FILES := \
      $(if $(wildcard $(PRODUCT_DIR)init.rc),$(PRODUCT_DIR)init.rc:root/init.rc) \
-@@ -76,6 +96,12 @@ PRODUCT_COPY_FILES += \
+@@ -76,6 +97,12 @@ PRODUCT_COPY_FILES += \
      $(foreach f,$(wildcard $(LOCAL_PATH)/alsa/*),$(f):$(subst $(LOCAL_PATH),system/etc,$(f))) \
      $(foreach f,$(wildcard $(LOCAL_PATH)/idc/*.idc $(LOCAL_PATH)/keylayout/*.kl),$(f):$(subst $(LOCAL_PATH),system/usr,$(f)))
  
@@ -49,7 +50,7 @@ index 3764464..d378c31 100644
  PRODUCT_TAGS += dalvik.gc.type-precise
  
  PRODUCT_CHARACTERISTICS := tablet
-@@ -83,6 +109,8 @@ PRODUCT_CHARACTERISTICS := tablet
+@@ -83,6 +110,8 @@ PRODUCT_CHARACTERISTICS := tablet
  PRODUCT_AAPT_CONFIG := normal large xlarge mdpi hdpi
  PRODUCT_AAPT_PREF_CONFIG := mdpi
  
@@ -58,11 +59,10 @@ index 3764464..d378c31 100644
  DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
  
  # Get the firmwares
-@@ -107,7 +135,7 @@ $(call inherit-product-if-exists,hardware/libsensors/sensors.mk)
- $(call inherit-product,frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
+@@ -108,6 +137,7 @@ $(call inherit-product,frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-hea
  
  # Get GMS
--$(call inherit-product-if-exists,vendor/google/products/gms.mk)
+ $(call inherit-product-if-exists,vendor/google/products/gms.mk)
 +$(call inherit-product-if-exists,vendor/opengapps/build/opengapps-packages.mk)
  
  # Get native bridge settings
