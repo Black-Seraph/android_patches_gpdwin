@@ -27,46 +27,44 @@ index 01ff90e..3fa12e8 100644
  
  menu separator
 diff --git a/install/grub2/efi/boot/android.cfg b/install/grub2/efi/boot/android.cfg
-index f26dcbc..8bb42a6 100644
+index f26dcbc..79eeeeb 100644
 --- a/install/grub2/efi/boot/android.cfg
 +++ b/install/grub2/efi/boot/android.cfg
-@@ -1,11 +1,12 @@
- # $1 Title
--# $2... Kernel cmdline
-+# $2 Kernel image
-+# $3... Kernel cmdline
- function add_entry {
- 	menuentry "OS_TITLE VER $1" "$@" --class android-x86 {
- 		shift 2
- 		savedefault
- 		set root=$android
--		linux $kdir/kernel CMDLINE $src $@
-+		linux $kdir/$2 CMDLINE $src $@
- 		initrd $kdir/initrd.img
+@@ -10,6 +10,18 @@ function add_entry {
  	}
  }
-@@ -50,17 +51,17 @@ search --no-floppy --set android -f $kdir/kernel
- export android bootefi grub kdir live src
  
- # Create main menu
--add_entry "$live" quiet
--add_entry "$debug_mode" DEBUG=2
-+add_entry "$live" kernel quiet
-+add_entry "$debug_mode" kernel DEBUG=2
++# $1 Title
++# $2... kernel cmdline
++function add_entry_vesa {
++	menuentry "OS_TITLE VER $1" "$@" --class android-x86 {
++		shift 2
++		savedefault
++		set root=$android
++		linux $kdir/install CMDLINE $src $@
++		initrd $kdir/initrd.img
++	}
++}
++
+ # $1 EFI to chainload
+ # $2 OS name
+ # $3 Class
+@@ -53,14 +65,14 @@ export android bootefi grub kdir live src
+ add_entry "$live" quiet
+ add_entry "$debug_mode" DEBUG=2
  if [ -s ($android)$kdir/install.img ]; then
 -	add_entry "Installation" INSTALL=1
 -fi
-+	add_entry "Installation" install INSTALL=1
++	add_entry_vesa "Installation" INSTALL=1
 +fi/
  
  submenu "Advanced options -> " {
--	add_entry "$live - No Hardware Acceleration" quiet nomodeset HWACCEL=0
-+	add_entry "$live - No Hardware Acceleration" kernel quiet nomodeset HWACCEL=0
+ 	add_entry "$live - No Hardware Acceleration" quiet nomodeset HWACCEL=0
  	if [ -s ($android)$kdir/install.img ]; then
 -		add_entry "Auto Install to specified harddisk" AUTO_INSTALL=0
 -		add_entry "Auto Update" AUTO_INSTALL=update
-+		add_entry "Auto Install to specified harddisk" install AUTO_INSTALL=0
-+		add_entry "Auto Update" install AUTO_INSTALL=update
++		add_entry_vesa "Auto Install to specified harddisk" AUTO_INSTALL=0
++		add_entry_vesa "Auto Update" AUTO_INSTALL=update
  	fi
  	add_os_if_exists /EFI/BOOT/$bootefi "UEFI OS"
  	add_os_if_exists /EFI/BOOT/fallback.efi "UEFI Fallback"
