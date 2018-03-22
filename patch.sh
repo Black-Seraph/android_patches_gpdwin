@@ -60,6 +60,7 @@ git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_nougat_blu
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_add_gpd_pocket_fan_driver.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_disable_werror.diff"
 git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_enable_monotonic_bss_tsf.diff"
+git apply --ignore-space-change --ignore-whitespace "$DIR/diff/kernel_update_touchscreen_driver.diff"
 cp "$DIR/blob/android-x86_64_defconfig" arch/x86/configs/android-x86_64_defconfig
 cd ..
 
