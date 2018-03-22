@@ -27,7 +27,7 @@ index 01ff90e..3fa12e8 100644
  
  menu separator
 diff --git a/install/grub2/efi/boot/android.cfg b/install/grub2/efi/boot/android.cfg
-index f26dcbc..79eeeeb 100644
+index f26dcbc..fd25da0 100644
 --- a/install/grub2/efi/boot/android.cfg
 +++ b/install/grub2/efi/boot/android.cfg
 @@ -10,6 +10,18 @@ function add_entry {
@@ -54,9 +54,8 @@ index f26dcbc..79eeeeb 100644
  add_entry "$debug_mode" DEBUG=2
  if [ -s ($android)$kdir/install.img ]; then
 -	add_entry "Installation" INSTALL=1
--fi
 +	add_entry_vesa "Installation" INSTALL=1
-+fi/
+ fi
  
  submenu "Advanced options -> " {
  	add_entry "$live - No Hardware Acceleration" quiet nomodeset HWACCEL=0
